@@ -10,7 +10,7 @@
 
 A _meme_ that captures how I currently feel about my university studies is 
 
-![](https://media1.tenor.com/m/1Hq1EY8_MXAAAAAd/m%C3%A8o-troll.gif)
+![](https://media1.tenor.com/m/SS5W3GW-8vAAAAAd/confused-huh.gif)
 
 ### Some helpful links for me to store somewhere
 
