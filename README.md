@@ -1,13 +1,18 @@
-# stats220
+# Stats 220
 
-This is my repo for STATS 220. 
+### A little about me
 
-A little about me:
-
-- I am undertaking a degree in Computer Science
+- I am undertaking a degree in **Computer Science**
 - I am taking STATS 220 because it looked like it related a bit with my degree and sounded more enjoyable than other papers I was deciding on taking
 - I am interested in learning about anything that correlates to programming
 
-A meme that captures how I currently feel about my university studies is 
+### Even more about me
 
-![](https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZHF1d3ozNXRhdnB6YzQ1bnB0YTUxaW9laW5yMnUyNzFwZWZpeThxeCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rWq6jZ0yNkMit0VfoW/giphy.gif)
+A _meme_ that captures how I currently feel about my university studies is 
+
+![](https://media1.tenor.com/m/1Hq1EY8_MXAAAAAd/m%C3%A8o-troll.gif)
+
+### Some helpful links for me to store somewhere
+
+1. [CRAN R](https://cran.r-project.org/)
+2. [Basic Markdown](https://markdownguide.offshoot.io/basic-syntax/)
