@@ -1,0 +1,167 @@
+---
+title: My dynamic report
+output: html_fragment
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
+
+```
+
+```{css}
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+
+body, h2, p {
+  color: #1f1f1f;
+  font-family: "Fira Code", sans-serif;
+}
+
+body {
+  max-width: 640px;
+  margin: 0 auto;
+  background-color: #fcefee;
+  animation: fadeIn 0.75s ease-in;
+}
+
+p, h2 {
+  background-color: #ffffff;
+  border-radius: 6px;
+  padding: 16px 20px;
+  outline: 1px solid #dadada;
+  margin: 16px 0px 16px 0px;
+}
+
+h2 {
+  border-top: 12px solid #ea9290;
+  text-align: center;
+}
+
+p {
+  font-size: 1.0em;
+}
+
+img {
+  display: block;
+  margin: 16px auto;
+  max-width: 100%;
+  transition: transform 0.3s ease;
+}
+
+img:hover {
+  transform: scale(1.02);
+}
+
+.banner {
+  width: 100%;
+  margin: 0;
+  border-radius: 6px;
+  transition: none;
+}
+
+.banner:hover {
+  transform: none;
+}
+
+p:has(img.banner) {
+  background-color: transparent;
+  padding: 0;
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+```
+
+![](https://lh7-rt.googleusercontent.com/formsz/AN7BsVBOo50MGe_JnHIfTUk5B3AwDEihDFdzwxrYSfqXQrfT7DCas7pgO-g8o8T0azgz3KmIx7wez6liRdW5Ake1Sv8NcEKCpSBFBRSCmJGegOrs6TLirNWVIF5M1qL4IaRzeMyt1mrdv-2v0dAem8Nc1Ot3zPT1deLo5AsgLKkfTYbYPUsJaCpnGwowwxmVqcfJxP6C4ZEnqtGE07PK=w1916?key=IJblmpBv0zOCSN2x1xGl7w){.banner}
+
+## What are mutuals liking on Instagram Reels?
+
+This report tracks observations of Instagram Reels that have been like by mutuals (people you follow who also follow you back). Data was logged over a couple of days using a Google Form that captured the content category, recording format, likes, views, and duration of each reel observed.
+
+```{r}
+library(tidyverse)
+
+options(scipen = 999)
+
+logged_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vQng-3GIUldqHQO-VWV2hB5-qA5nf9_KFnvaQfE311kEKpUZw9oS_AIYK_bpZgVVCasIM7PgTPhWFLS/pub?gid=500751628&single=true&output=csv")
+
+latest_data <- rename(
+  logged_data,
+  content_category = 2,
+  recording_format = 3,
+  likes = 4,
+  views = 5,
+  duration = 6)
+
+
+total_observations <- nrow(latest_data)
+
+
+# Content Category Data
+latest_data_longer <- latest_data |>
+  separate_rows(content_category, sep = ", ")
+
+common_content_category <- latest_data_longer |>
+  count(content_category) |>
+  slice_max(n)
+
+most_common_content_category_name <- common_content_category$content_category
+most_common_content_category_count <- common_content_category$n
+
+
+# Recording Format Data
+common_recording_format <- latest_data |>
+  count(recording_format) |>
+  slice_max(n)
+
+most_common_recording_format_name <- common_recording_format$recording_format
+most_common_recording_format_count <- common_recording_format$n
+
+
+# Likes can be NA as not required in form due to Instagram reel creators turning 
+# likes visibility off
+mean_likes <- mean(latest_data$likes, na.rm = TRUE)
+mean_views <- mean(latest_data$views)
+mean_duration <- mean(latest_data$duration)
+```
+
+Based on **`r total_observations`** observations logged over a couple of days the average reels had **`r format(round(mean_likes), big.mark = ",")`** likes with **`r format(round(mean_views), big.mark = ",")`** views and duration of **`r round(mean_duration, 1)`** seconds.
+
+The bar chart below shows the distribution of content categories observed across all logged reels. With the most popular category being **`r most_common_content_category_name`** at a total of **`r most_common_content_category_count`**.
+```{r}
+GRAPH_THEME <-theme(
+  plot.title = element_text(family = "mono", face = "bold", size = 14, hjust = 0.5),
+  axis.title = element_text(family = "mono", face = "bold", size = 11),
+  axis.text = element_text(family = "mono", face = "bold", size = 11),
+  axis.text.x = element_text(angle = 90, hjust = 1),
+  panel.grid.major.x = element_blank())
+
+# Content Category Graph
+ggplot(data = latest_data_longer) +
+  geom_bar(
+    aes(x = content_category, fill = content_category),
+    show.legend = FALSE) +
+  labs(
+    title = "Content Categories of Mutual Liked Reels",
+    x = "Content Category",
+    y = "Count") +
+  theme_minimal() +
+  GRAPH_THEME
+```
+
+The chart below displays the recording formats used in reels that were like by mutuals. The most dominate category was **`r most_common_recording_format_name`** at a total of **`r most_common_recording_format_count`**.
+```{r}
+
+# Recording Format Graph
+ggplot(data = latest_data) +
+  geom_bar(
+    aes(x = recording_format, fill = recording_format),
+    show.legend = FALSE) +
+  labs(title = "Recording Formats of Mutual Liked Reels",
+       x = "Recording Format",
+       y = "Count") +
+  theme_minimal() +
+  GRAPH_THEME
+```
